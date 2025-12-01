@@ -20,6 +20,12 @@
     dotnet sln add Tests
     ```
 
+    > [!TIP]
+    >
+    > If `dotnet sln add Tests` fails. You can use direct reference
+    > `dotnet sln add Tests/Tests.csproj`
+    > It might work better.
+
 4. Verify that tests run
 
     ```sh
