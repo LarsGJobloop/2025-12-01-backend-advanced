@@ -45,6 +45,10 @@
 
     ![Overview](/docs/week1.excalidraw.png)
 
+## Sketches
+
+![TDD Rythm](/docs/tdd-rythm.excalidraw.png)
+
 ## Nix and Flakes
 
 Nix and Flakes are a solution for ensuring reproducible development environments. You can safely ignore the following files:
