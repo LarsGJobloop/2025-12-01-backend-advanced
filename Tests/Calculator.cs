@@ -2,13 +2,13 @@
 
 public class CalculatorTests
 {
-    [Fact]
-    public void SumMethod_Should_SumCorrectly()
+    [Theory]
+    [InlineData(2, 2, 4)]
+    [InlineData(0, 0, 0)]
+    [InlineData(10, 10, 20)]
+    public void SumMethod_Should_SumCorrectly(int a, int b, int expected)
     {
         // Arrange
-        var a = 2;
-        var b = 2;
-        var expected = 4;
         var calculator = new Calculator.Calculator();
 
         // Act
