@@ -1,0 +1,9 @@
+﻿namespace Calculator;
+
+public class Calculator
+{
+  public int Sum(int a, int b)
+  {
+    return 2;
+  }
+}
