@@ -39,11 +39,14 @@
 
 ## Overview
 
+
 ![Module Overview](/docs/backend-advanced-overview.excalidraw.png)
 
 - Week 1 - TDD
 
     ![Overview](/docs/week1.excalidraw.png)
+
+### [Technology Reference](/docs/technology-references.md)
 
 ## Sketches
 
