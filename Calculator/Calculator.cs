@@ -4,6 +4,6 @@ public class Calculator
 {
   public int Sum(int a, int b)
   {
-    return 4;
+    return a + b;
   }
 }
