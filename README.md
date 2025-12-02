@@ -44,7 +44,12 @@
 
 - Week 1 - TDD
 
-    ![Overview](/docs/week1.excalidraw.png)
+    - Overview
+        ![Overview](/docs/week1.excalidraw.png)
+    - Internal/External Interfaces
+    ![Internal/External Interfaces](/docs/internal-external-interfaces.excalidraw.png)
+    - Solution Draft
+    ![Solution draft](/docs/solution-draft.excalidraw.png)
 
 ### [Technology Reference](/docs/technology-references.md)
 
