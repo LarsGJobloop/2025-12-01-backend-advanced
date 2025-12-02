@@ -14,6 +14,10 @@ public class HealthCheck : IClassFixture<WebApplicationFactory<Program>>
     _factory = factory;
   }
 
+  /// <summary>
+  /// A simple test to verify that we can actually connect to the server
+  /// send messages, recive and parse responses.
+  /// </summary>
   [Fact]
   public async Task WhenQuerrying_HealthEndpoint_ServerRespondsWithOK()
   {
