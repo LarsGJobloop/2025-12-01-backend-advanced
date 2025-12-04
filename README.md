@@ -50,6 +50,7 @@
     ![Internal/External Interfaces](/docs/internal-external-interfaces.excalidraw.png)
     - Solution Draft
     ![Solution draft](/docs/solution-draft.excalidraw.png)
+    - [Week 1 Checklist](week-1-checklist.md) - Suggested scenarios to consider for your services
 
 ### [Technology Reference](/docs/technology-references.md)
 
