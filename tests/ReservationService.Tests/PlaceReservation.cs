@@ -47,4 +47,24 @@ public class PlaceReservation(WebApplicationFactory<Program> factory) : TestEnvi
         // Then the response is an error
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
+
+    [Fact]
+    public async Task GivenAnExistingReservation_WhenITryToDoubleBookTheSameAsset_TheResponseIsAError()
+    {
+        // Given an existing reservation
+        var client = Client;
+        var reservationRequest = new ReservationRequest
+        {
+            AssetId = "123",
+            StartDate = DateTime.Now,
+            EndDate = DateTime.Now.AddDays(1)
+        };
+        await client.PostAsJsonAsync("/reservations", reservationRequest);
+
+        // When I try to double book the same asset
+        var response = await client.PostAsJsonAsync("/reservations", reservationRequest);
+
+        // Then the response is an error
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
 }
