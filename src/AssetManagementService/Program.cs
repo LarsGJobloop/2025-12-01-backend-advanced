@@ -17,11 +17,8 @@ app.MapPost("/assets", (AssetRegistrationRequest request) =>
 
 app.MapGet("/assets/{id}", (string id) =>
 {
-  if (assets.TryGetValue(id, out var asset))
-  {
-    return Results.Ok(asset);
-  }
-  return Results.NotFound();
+  assets.TryGetValue(id, out var asset);
+  return Results.Ok(asset);
 });
 
 app.Run();

@@ -78,4 +78,19 @@ public class AssetRegistration : IClassFixture<WebApplicationFactory<Program>>
     Assert.Equal(assetId, assetResponse.Id);
     Assert.Equal(registration.Name, assetResponse.Name);
   }
+
+  [Fact]
+  public async Task GivenAnNonExistingAsset_WhenIRequestTheAsset_TheRequestIsRejected()
+  {
+    // Given a fresh client
+    var client = _factory.CreateClient();
+    // And a non existing asset ID
+    var assetId = "non-existing-asset-id";
+
+    // When I request the asset by ID
+    var response = await client.GetAsync($"/assets/{assetId}");
+
+    // Then the request is rejected
+    Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+  }
 }
