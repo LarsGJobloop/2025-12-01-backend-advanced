@@ -12,7 +12,6 @@ namespace ReservationService.Services;
 /// Service instead of requiring the actual service to be running. This approach allows tests to run in
 /// isolation and verify behavior without depending on external services being available.
 /// </remarks>
-/// <param name="assetManagementServiceUrl">The URL of the Asset Management Service.</param>
 public class AssetManagementServiceClient
 {
   /// <summary>
@@ -21,13 +20,12 @@ public class AssetManagementServiceClient
   public HttpClient Client { get; }
 
   /// <summary>
-  /// Initializes a new instance of the AssetManagementServiceClient class.
+  /// Initializes a new instance of the AssetManagementServiceClient class using dependency injection.
+  /// This constructor is used when the client is registered via AddHttpClient.
   /// </summary>
-  /// <param name="assetManagementServiceUrl">The URL of the Asset Management Service.</param>
-  public AssetManagementServiceClient(string assetManagementServiceUrl)
+  /// <param name="httpClient">The HTTP client instance injected via dependency injection.</param>
+  public AssetManagementServiceClient(HttpClient httpClient)
   {
-    var client = new HttpClient();
-    client.BaseAddress = new Uri(assetManagementServiceUrl);
-    Client = client;
+    Client = httpClient;
   }
 }
