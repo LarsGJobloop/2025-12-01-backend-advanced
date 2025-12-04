@@ -86,4 +86,45 @@ public class PlaceReservation : TestEnvironment
         // Then the response is an error
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
+
+    [Fact]
+    public async Task GivenAnExistingReservation_WhenIBookTheSameAssetWithNonOverlappingPeriod_TheReservationIsSuccessful()
+    {
+        // Given a registered asset
+        var assetRegistration = new AssetRegistrationRequest { Name = "Test Asset" };
+        var assetResponse = await AssetManagementServiceClient.PostAsJsonAsync("/assets", assetRegistration);
+        assetResponse.EnsureSuccessStatusCode();
+        var asset = await assetResponse.Content.ReadFromJsonAsync<AssetRegistrationResponse>();
+        Assert.NotNull(asset);
+        var assetId = asset.Id;
+
+        // And an existing reservation
+        var firstReservationRequest = new ReservationRequest
+        {
+            AssetId = assetId,
+            StartDate = DateTime.Now,
+            EndDate = DateTime.Now.AddDays(1)
+        };
+        var firstResponse = await ReservationServiceClient.PostAsJsonAsync("/reservations", firstReservationRequest);
+        firstResponse.EnsureSuccessStatusCode();
+
+        // When I book the same asset with a non-overlapping period
+        var secondReservationRequest = new ReservationRequest
+        {
+            AssetId = assetId,
+            StartDate = DateTime.Now.AddDays(2),
+            EndDate = DateTime.Now.AddDays(3)
+        };
+        var secondResponse = await ReservationServiceClient.PostAsJsonAsync("/reservations", secondReservationRequest);
+
+        // Then the reservation is successful
+        secondResponse.EnsureSuccessStatusCode();
+
+        // And the response is a reservation
+        var reservation = await secondResponse.Content.ReadFromJsonAsync<ReservationResponse>();
+        Assert.NotNull(reservation);
+        Assert.Equal(secondReservationRequest.AssetId, reservation.AssetId);
+        Assert.Equal(secondReservationRequest.StartDate, reservation.StartDate);
+        Assert.Equal(secondReservationRequest.EndDate, reservation.EndDate);
+    }
 }
