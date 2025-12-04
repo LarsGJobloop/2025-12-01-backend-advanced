@@ -2,6 +2,7 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
 app.MapGet("/health", () => "Ok");
+app.MapPost("/assets", () => new { Id = Guid.NewGuid() });
 
 app.Run();
 
