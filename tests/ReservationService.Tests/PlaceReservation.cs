@@ -1,23 +1,10 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Contracts.ReservationService;
 
 namespace ReservationService.Tests;
 
-class ReservationRequest
-{
-    public required string AssetId { get; init; }
-    public required DateTime StartDate { get; init; }
-    public required DateTime EndDate { get; init; }
-}
-
-class ReservationResponse
-{
-    public required Guid Id { get; init; }
-    public required string AssetId { get; init; }
-    public required DateTime StartDate { get; init; }
-    public required DateTime EndDate { get; init; }
-}
 
 public class PlaceReservation(WebApplicationFactory<Program> factory) : TestEnvironment(factory)
 {
