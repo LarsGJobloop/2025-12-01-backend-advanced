@@ -14,7 +14,7 @@ builder.Services.AddHttpClient<AssetManagementServiceClient>(client =>
 
 var app = builder.Build();
 
-var reservations = new Dictionary<string, ReservationResponse>();
+var reservations = new Dictionary<string, List<ReservationResponse>>();
 
 app.MapGet("/health", () => "OK");
 
@@ -27,10 +27,16 @@ app.MapPost("/reservations", async (ReservationRequest request, AssetManagementS
     return Results.BadRequest();
   }
 
-  // Validate that the asset is not already reserved
-  if (reservations.ContainsKey(request.AssetId))
+  // Check for overlapping reservations
+  if (reservations.TryGetValue(request.AssetId, out var existingReservations))
   {
-    return Results.BadRequest();
+    var hasOverlap = existingReservations.Any(existing =>
+      request.StartDate < existing.EndDate && request.EndDate > existing.StartDate);
+
+    if (hasOverlap)
+    {
+      return Results.BadRequest();
+    }
   }
 
   // Create a new reservation
@@ -43,7 +49,11 @@ app.MapPost("/reservations", async (ReservationRequest request, AssetManagementS
   };
 
   // Persist the reservation
-  reservations[request.AssetId] = newReservation;
+  if (!reservations.ContainsKey(request.AssetId))
+  {
+    reservations[request.AssetId] = new List<ReservationResponse>();
+  }
+  reservations[request.AssetId].Add(newReservation);
 
   // Return the reservation
   return Results.Ok(newReservation);
