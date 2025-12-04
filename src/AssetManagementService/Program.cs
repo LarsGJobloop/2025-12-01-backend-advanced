@@ -21,7 +21,7 @@ app.MapGet("/assets/{id}", (string id) =>
   return asset is not null ? Results.Ok(asset) : Results.NotFound();
 });
 
-app.MapGet("/assets", () => Results.Ok(new List<Asset>()));
+app.MapGet("/assets", () => Results.Ok(assets.Values.ToList()));
 
 app.Run();
 
