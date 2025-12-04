@@ -1,5 +1,4 @@
 using Contracts.ReservationService;
-using Contracts.AssetManagement;
 using ReservationService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,13 +11,18 @@ builder.Services.AddHttpClient<AssetManagementServiceClient>(client =>
   client.BaseAddress = new Uri(assetManagementServiceUrl);
 });
 
-var app = builder.Build();
+// Register domain services
+builder.Services.AddSingleton<ReservationDomainService>();
 
-var reservations = new Dictionary<string, List<ReservationResponse>>();
+var app = builder.Build();
 
 app.MapGet("/health", () => "OK");
 
-app.MapPost("/reservations", async (ReservationRequest request, AssetManagementServiceClient assetClient) =>
+app.MapPost("/reservations", async (
+  ReservationRequest request,
+  AssetManagementServiceClient assetClient,
+  ReservationDomainService reservationDomainService
+) =>
 {
   // Validate that the asset exists in the Asset Management Service
   var assetResponse = await assetClient.Client.GetAsync($"/assets/{request.AssetId}");
@@ -28,32 +32,13 @@ app.MapPost("/reservations", async (ReservationRequest request, AssetManagementS
   }
 
   // Check for overlapping reservations
-  if (reservations.TryGetValue(request.AssetId, out var existingReservations))
+  if (reservationDomainService.HasOverlappingReservation(request.AssetId, request.StartDate, request.EndDate))
   {
-    var hasOverlap = existingReservations.Any(existing =>
-      request.StartDate < existing.EndDate && request.EndDate > existing.StartDate);
-
-    if (hasOverlap)
-    {
-      return Results.BadRequest();
-    }
+    return Results.BadRequest();
   }
 
   // Create a new reservation
-  var newReservation = new ReservationResponse
-  {
-    Id = Guid.NewGuid(),
-    AssetId = request.AssetId,
-    StartDate = request.StartDate,
-    EndDate = request.EndDate
-  };
-
-  // Persist the reservation
-  if (!reservations.ContainsKey(request.AssetId))
-  {
-    reservations[request.AssetId] = new List<ReservationResponse>();
-  }
-  reservations[request.AssetId].Add(newReservation);
+  var newReservation = reservationDomainService.CreateReservation(request);
 
   // Return the reservation
   return Results.Ok(newReservation);
