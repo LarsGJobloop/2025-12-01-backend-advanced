@@ -22,6 +22,21 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\..\src\ReservationService\ReservationService.csproj" />
+
+    <!-- 
+      This is to allow us to test against the real AssetManagementService
+      Without having to mock it. It's slightly slower, but it's more realistic.
+
+      It's also far simpler, and easier to maintain, than to write a mock.
+
+      FYI: Mocks are not covered in this course.
+
+      If you want to learn more about mocks, you can check out the following resources:
+      - https://martinfowler.com/bliki/MockObject.html
+      - https://martinfowler.com/bliki/TestDouble.html
+     -->
+    <ProjectReference Include="..\..\src\AssetManagementService\AssetManagementService.csproj" Aliases="AssetManagementService" />
+
   </ItemGroup>
 
 </Project>

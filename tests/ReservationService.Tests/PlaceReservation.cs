@@ -6,13 +6,12 @@ using Contracts.ReservationService;
 namespace ReservationService.Tests;
 
 
-public class PlaceReservation(WebApplicationFactory<Program> factory) : TestEnvironment(factory)
+public class PlaceReservation : TestEnvironment
 {
     [Fact]
     public async Task GivenAValidReservationRequest_WhenIPlaceAReservation_TheResponseIsASuccess()
     {
         // Given a valid reservation request
-        var client = Client;
         var reservationRequest = new ReservationRequest
         {
             AssetId = "123",
@@ -21,7 +20,7 @@ public class PlaceReservation(WebApplicationFactory<Program> factory) : TestEnvi
         };
 
         // When I place a reservation
-        var response = await client.PostAsJsonAsync("/reservations", reservationRequest);
+        var response = await ReservationServiceClient.PostAsJsonAsync("/reservations", reservationRequest);
 
         // Then the response is successful
         response.EnsureSuccessStatusCode();
@@ -38,11 +37,10 @@ public class PlaceReservation(WebApplicationFactory<Program> factory) : TestEnvi
     public async Task GivenAnInvalidReservationRequest_WhenIPlaceAReservation_TheResponseIsAError()
     {
         // Given an invalid reservation request
-        var client = Client;
         var reservationRequest = new { Invalid = "Invalid" };
 
         // When I place a reservation
-        var response = await client.PostAsJsonAsync("/reservations", reservationRequest);
+        var response = await ReservationServiceClient.PostAsJsonAsync("/reservations", reservationRequest);
 
         // Then the response is an error
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -52,17 +50,16 @@ public class PlaceReservation(WebApplicationFactory<Program> factory) : TestEnvi
     public async Task GivenAnExistingReservation_WhenITryToDoubleBookTheSameAsset_TheResponseIsAError()
     {
         // Given an existing reservation
-        var client = Client;
         var reservationRequest = new ReservationRequest
         {
             AssetId = "123",
             StartDate = DateTime.Now,
             EndDate = DateTime.Now.AddDays(1)
         };
-        await client.PostAsJsonAsync("/reservations", reservationRequest);
+        await ReservationServiceClient.PostAsJsonAsync("/reservations", reservationRequest);
 
         // When I try to double book the same asset
-        var response = await client.PostAsJsonAsync("/reservations", reservationRequest);
+        var response = await ReservationServiceClient.PostAsJsonAsync("/reservations", reservationRequest);
 
         // Then the response is an error
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
