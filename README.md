@@ -42,6 +42,24 @@ dotnet run
 
 See [docs/setup-new-service.md](docs/setup-new-service.md) for instructions on setting up a new service with its test suite.
 
+### Walking Through the Commit History
+
+> [!IMPORTANT] > **The commit history is intended to be replayed step-by-step.** It follows TDD conventions (red → green → refactor) and serves as a **replayable walkthrough** of the development process.
+
+```sh
+# View commit history
+git log --oneline
+
+# View a specific commit
+git show <commit-hash>
+
+# Checkout a specific commit to see the code at that point
+git checkout <commit-hash>
+
+# Return to latest
+git checkout main
+```
+
 ## Project Structure
 
 - `src/AssetManagementService/` - Service for managing assets (registration, retrieval, listing)
