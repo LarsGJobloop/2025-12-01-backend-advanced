@@ -61,7 +61,9 @@ public class AssetRegistration : IClassFixture<WebApplicationFactory<Program>>
     var assetId = asset.Id;
 
     // When I request the asset by ID
-    var assetResponse = await client.GetFromJsonAsync<AssetRegistrationResponse>($"/assets/{assetId}");
+    var assetResponse = await client.GetFromJsonAsync<Asset>($"/assets/{assetId}");
+
+    // Then the asset is returned
     Assert.NotNull(assetResponse);
     Assert.Equal(assetId, assetResponse.Id);
     Assert.Equal(registration.Name, assetResponse.Name);
