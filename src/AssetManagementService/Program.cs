@@ -18,7 +18,7 @@ app.MapPost("/assets", (AssetRegistrationRequest request) =>
 app.MapGet("/assets/{id}", (string id) =>
 {
   assets.TryGetValue(id, out var asset);
-  return Results.Ok(asset);
+  return asset is not null ? Results.Ok(asset) : Results.NotFound();
 });
 
 app.Run();
