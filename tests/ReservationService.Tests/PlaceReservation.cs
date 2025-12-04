@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Contracts.ReservationService;
+using Contracts.AssetManagement;
 
 namespace ReservationService.Tests;
 
@@ -11,10 +12,18 @@ public class PlaceReservation : TestEnvironment
     [Fact]
     public async Task GivenAValidReservationRequest_WhenIPlaceAReservation_TheResponseIsASuccess()
     {
-        // Given a valid reservation request
+        // Given a registered asset
+        var assetRegistration = new AssetRegistrationRequest { Name = "Test Asset" };
+        var assetResponse = await AssetManagementServiceClient.PostAsJsonAsync("/assets", assetRegistration);
+        assetResponse.EnsureSuccessStatusCode();
+        var asset = await assetResponse.Content.ReadFromJsonAsync<AssetRegistrationResponse>();
+        Assert.NotNull(asset);
+        var assetId = asset.Id;
+
+        // And a valid reservation request
         var reservationRequest = new ReservationRequest
         {
-            AssetId = "123",
+            AssetId = assetId,
             StartDate = DateTime.Now,
             EndDate = DateTime.Now.AddDays(1)
         };
