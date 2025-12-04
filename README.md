@@ -51,23 +51,23 @@ See [docs/setup-new-service.md](docs/setup-new-service.md) for instructions on s
 
 ## Overview
 
-![Module Overview](/docs/backend-advanced-overview.excalidraw.png)
+![Module Overview](/docs/sketches/backend-advanced-overview.excalidraw.png)
 
 - Week 1 - TDD
 
   - Overview
-    ![Overview](/docs/week1.excalidraw.png)
+    ![Overview](/docs/sketches/week1.excalidraw.png)
   - Internal/External Interfaces
-    ![Internal/External Interfaces](/docs/internal-external-interfaces.excalidraw.png)
+    ![Internal/External Interfaces](/docs/sketches/internal-external-interfaces.excalidraw.png)
   - Solution Draft
-    ![Solution draft](/docs/solution-draft.excalidraw.png)
+    ![Solution draft](/docs/sketches/solution-draft.excalidraw.png)
   - [Week 1 Checklist](week-1-checklist.md) - Suggested scenarios to consider for your services
 
 ### [Technology Reference](/docs/technology-references.md)
 
 ## Sketches
 
-![TDD Rythm](/docs/tdd-rythm.excalidraw.png)
+![TDD Rythm](/docs/sketches/tdd-rythm.excalidraw.png)
 
 ## Nix and Flakes
 
