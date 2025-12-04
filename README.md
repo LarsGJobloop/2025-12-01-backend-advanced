@@ -1,56 +1,67 @@
 # Backend Advanced
 
-## Setup xUnit Project
+A service-oriented architecture project demonstrating TDD practices with two independent services: AssetManagementService and ReservationService.
 
-1. Create new project
+## Getting Started
 
-    ```sh
-    dotnet new sln --name BackendAdvanced
-    ```
+### Prerequisites
 
-2. Create new xUnit Project
+- .NET 10.0 SDK
 
-    ```sh
-    dotnet new xunit --name Tests
-    ```
+> [!NOTE]
+>
+> A Nix flake Dev Shell is also provided. So if you have Nix set up on your system
+> you can just `git clone` -> `nix develop` and be up and running with the correct versions.
 
-3. Connect project to solution
+### Running Tests
 
-    ```sh
-    dotnet sln add Tests
-    ```
+```sh
+dotnet test
+```
 
-    > [!TIP]
-    >
-    > If `dotnet sln add Tests` fails. You can use direct reference
-    > `dotnet sln add Tests/Tests.csproj`
-    > It might work better.
+### Running Services
 
-4. Verify that tests run
+**AssetManagementService** (runs on http://localhost:5002):
 
-    ```sh
-    dotnet tests
-    ```
+```sh
+cd src/AssetManagementService
+dotnet run
+```
 
-5. Add a .gitignore for C# and .NET files
+**ReservationService** (runs on http://localhost:5108):
 
-    - bin directory
-    - obj directory
+```sh
+cd src/ReservationService
+dotnet run
+```
+
+> [!NOTE]
+> Both services can run simultaneously. ReservationService communicates with AssetManagementService via HTTP.
+
+### Adding a New Service
+
+See [docs/setup-new-service.md](docs/setup-new-service.md) for instructions on setting up a new service with its test suite.
+
+## Project Structure
+
+- `src/AssetManagementService/` - Service for managing assets (registration, retrieval, listing)
+- `src/ReservationService/` - Service for managing reservations (creation, validation, overlap detection)
+- `src/Contracts/` - Shared contracts (DTOs) between services
+- `tests/` - Integration tests for both services
 
 ## Overview
-
 
 ![Module Overview](/docs/backend-advanced-overview.excalidraw.png)
 
 - Week 1 - TDD
 
-    - Overview
-        ![Overview](/docs/week1.excalidraw.png)
-    - Internal/External Interfaces
+  - Overview
+    ![Overview](/docs/week1.excalidraw.png)
+  - Internal/External Interfaces
     ![Internal/External Interfaces](/docs/internal-external-interfaces.excalidraw.png)
-    - Solution Draft
+  - Solution Draft
     ![Solution draft](/docs/solution-draft.excalidraw.png)
-    - [Week 1 Checklist](week-1-checklist.md) - Suggested scenarios to consider for your services
+  - [Week 1 Checklist](week-1-checklist.md) - Suggested scenarios to consider for your services
 
 ### [Technology Reference](/docs/technology-references.md)
 
