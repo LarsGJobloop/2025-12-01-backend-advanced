@@ -42,4 +42,19 @@ public class AssetRegistration : IClassFixture<WebApplicationFactory<Program>>
     Assert.NotNull(createResponse);
     Assert.NotEmpty(createResponse.Id);
   }
+
+  [Fact]
+  public async Task GivenAnInvalidRegistration_WhenICreateAnAsset_TheRequestIsRejected()
+  {
+    // Given a fresh client
+    var client = _factory.CreateClient();
+    // And a valid registration
+    var registration = new { Invalid = "Invalid" }; // This is an invalid registration
+
+    // When I create the asset
+    var response = await client.PostAsJsonAsync("/assets", registration);
+
+    // Then the request is rejected
+    Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+  }
 }
