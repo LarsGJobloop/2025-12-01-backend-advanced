@@ -49,12 +49,22 @@ public class AssetRegistration : IClassFixture<WebApplicationFactory<Program>>
     Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
   }
 
-  [Fact]
-  public async Task GivenAnExistingAsset_WhenIRequestTheAsset_TheAssetIsReturned()
+  [Theory]
+  [InlineData("Test Asset")]
+  [InlineData("Test Asset 2")]
+  [InlineData("Test Asset 3")]
+  [InlineData("Test Asset 4")]
+  [InlineData("Test Asset 5")]
+  [InlineData("Test Asset 6")]
+  [InlineData("Test Asset 7")]
+  [InlineData("Test Asset 8")]
+  [InlineData("Test Asset 9")]
+  [InlineData("Test Asset 10")]
+  public async Task GivenAnExistingAsset_WhenIRequestTheAsset_TheAssetIsReturned(string assetName)
   {
     // Given a registered asset
     var client = _factory.CreateClient();
-    var registration = new AssetRegistrationRequest { Name = "Test Asset" };
+    var registration = new AssetRegistrationRequest { Name = assetName };
     var response = await client.PostAsJsonAsync("/assets", registration);
     var asset = await response.Content.ReadFromJsonAsync<AssetRegistrationResponse>();
     Assert.NotNull(asset);
