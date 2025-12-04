@@ -33,4 +33,18 @@ public class PlaceReservation(WebApplicationFactory<Program> factory) : TestEnvi
         Assert.Equal(reservationRequest.StartDate, reservation.StartDate);
         Assert.Equal(reservationRequest.EndDate, reservation.EndDate);
     }
+
+    [Fact]
+    public async Task GivenAnInvalidReservationRequest_WhenIPlaceAReservation_TheResponseIsAError()
+    {
+        // Given an invalid reservation request
+        var client = Client;
+        var reservationRequest = new { Invalid = "Invalid" };
+
+        // When I place a reservation
+        var response = await client.PostAsJsonAsync("/reservations", reservationRequest);
+
+        // Then the response is an error
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
 }
