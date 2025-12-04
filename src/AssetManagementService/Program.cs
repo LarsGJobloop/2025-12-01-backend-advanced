@@ -1,27 +1,35 @@
+using AssetManagementService.Services;
 using Contracts.AssetManagement;
 
 var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
 
-var assets = new Dictionary<string, Asset>();
+// Register services
+builder.Services.AddSingleton<AssetService>();
+
+var app = builder.Build();
 
 app.MapGet("/health", () => "Ok");
 
-app.MapPost("/assets", (AssetRegistrationRequest request) =>
+app.MapPost("/assets", (
+  AssetRegistrationRequest request,
+  AssetService assetService
+) =>
 {
-  var asset = new Asset { Id = Guid.NewGuid().ToString(), Name = request.Name };
-  assets.Add(asset.Id, asset);
-  var response = new AssetRegistrationResponse { Id = asset.Id };
+  var response = assetService.RegisterAsset(request);
   return Results.Ok(response);
 });
 
-app.MapGet("/assets/{id}", (string id) =>
+app.MapGet("/assets/{id}", (string id, AssetService assetService) =>
 {
-  assets.TryGetValue(id, out var asset);
+  var asset = assetService.GetAsset(id);
   return asset is not null ? Results.Ok(asset) : Results.NotFound();
 });
 
-app.MapGet("/assets", () => Results.Ok(assets.Values.ToList()));
+app.MapGet("/assets", (AssetService assetService) =>
+{
+  var assets = assetService.ListAssets();
+  return Results.Ok(assets);
+});
 
 app.Run();
 
