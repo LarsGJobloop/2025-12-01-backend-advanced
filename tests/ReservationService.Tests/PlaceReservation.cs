@@ -63,10 +63,18 @@ public class PlaceReservation : TestEnvironment
     [Fact]
     public async Task GivenAnExistingReservation_WhenITryToDoubleBookTheSameAsset_TheResponseIsAError()
     {
-        // Given an existing reservation
+        // Given a registered asset
+        var assetRegistration = new AssetRegistrationRequest { Name = "Test Asset" };
+        var assetResponse = await AssetManagementServiceClient.PostAsJsonAsync("/assets", assetRegistration);
+        assetResponse.EnsureSuccessStatusCode();
+        var asset = await assetResponse.Content.ReadFromJsonAsync<AssetRegistrationResponse>();
+        Assert.NotNull(asset);
+        var assetId = asset.Id;
+
+        // And an existing reservation
         var reservationRequest = new ReservationRequest
         {
-            AssetId = "123",
+            AssetId = assetId,
             StartDate = DateTime.Now,
             EndDate = DateTime.Now.AddDays(1)
         };
