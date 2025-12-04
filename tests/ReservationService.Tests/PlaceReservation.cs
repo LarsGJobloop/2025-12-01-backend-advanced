@@ -45,8 +45,13 @@ public class PlaceReservation : TestEnvironment
     [Fact]
     public async Task GivenAnInvalidReservationRequest_WhenIPlaceAReservation_TheResponseIsAError()
     {
-        // Given an invalid reservation request
-        var reservationRequest = new { Invalid = "Invalid" };
+        // Given a reservation request with a non-existent asset ID
+        var reservationRequest = new ReservationRequest
+        {
+            AssetId = "non-existent-asset-id",
+            StartDate = DateTime.Now,
+            EndDate = DateTime.Now.AddDays(1)
+        };
 
         // When I place a reservation
         var response = await ReservationServiceClient.PostAsJsonAsync("/reservations", reservationRequest);
