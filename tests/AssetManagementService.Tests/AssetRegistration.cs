@@ -2,18 +2,9 @@ using System.Net;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
+using Contracts.AssetManagement;
 
 namespace AssetManagementService.Tests;
-
-class AssetRegistrationRequest
-{
-  public required string Name { get; set; }
-}
-
-class AssetRegistrationResponse
-{
-  public required string Id { get; set; }
-}
 
 public class AssetRegistration : IClassFixture<WebApplicationFactory<Program>>
 {
