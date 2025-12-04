@@ -5,20 +5,13 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace AssetManagementService.Tests;
 
-public class AssetListing : IClassFixture<WebApplicationFactory<Program>>
+public class AssetListing(WebApplicationFactory<Program> factory) : TestEnvironment(factory)
 {
-  private readonly WebApplicationFactory<Program> _factory;
-
-  public AssetListing(WebApplicationFactory<Program> factory)
-  {
-    _factory = factory;
-  }
-
   [Fact]
   public async Task GivenNoAssets_WhenIListTheAssets_TheResponseIsAnEmptyList()
   {
     // Given no assets
-    var client = _factory.CreateClient();
+    var client = Client;
 
     // When I list the assets
     var response = await client.GetAsync("/assets");
@@ -36,7 +29,7 @@ public class AssetListing : IClassFixture<WebApplicationFactory<Program>>
   public async Task GivenAnExistingAsset_WhenIListTheAssets_TheResponseIsAListWithTheAsset()
   {
     // Given a registered asset
-    var client = _factory.CreateClient();
+    var client = Client;
     var registration = new AssetRegistrationRequest { Name = "Test Asset" };
     var response = await client.PostAsJsonAsync("/assets", registration);
     var existingAsset = await response.Content.ReadFromJsonAsync<AssetRegistrationResponse>();

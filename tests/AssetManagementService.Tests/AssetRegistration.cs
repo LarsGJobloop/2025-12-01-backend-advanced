@@ -6,21 +6,13 @@ using Contracts.AssetManagement;
 
 namespace AssetManagementService.Tests;
 
-public class AssetRegistration : IClassFixture<WebApplicationFactory<Program>>
+public class AssetRegistration(WebApplicationFactory<Program> factory) : TestEnvironment(factory)
 {
-  private readonly WebApplicationFactory<Program> _factory;
-
-  public AssetRegistration(WebApplicationFactory<Program> factory)
-  {
-    _factory = factory;
-  }
-
-
   [Fact]
   public async Task GiveAValidRegistration_WhenICreateAnAsset_TheAssetIsCreated()
   {
     // Given a fresh client
-    var client = _factory.CreateClient();
+    var client = Client;
     // And a valid registration
     var registration = new AssetRegistrationRequest { Name = "Test Asset" };
 
@@ -38,7 +30,7 @@ public class AssetRegistration : IClassFixture<WebApplicationFactory<Program>>
   public async Task GivenAnInvalidRegistration_WhenICreateAnAsset_TheRequestIsRejected()
   {
     // Given a fresh client
-    var client = _factory.CreateClient();
+    var client = Client;
     // And a valid registration
     var registration = new { Invalid = "Invalid" }; // This is an invalid registration
 
@@ -63,7 +55,7 @@ public class AssetRegistration : IClassFixture<WebApplicationFactory<Program>>
   public async Task GivenAnExistingAsset_WhenIRequestTheAsset_TheAssetIsReturned(string assetName)
   {
     // Given a registered asset
-    var client = _factory.CreateClient();
+    var client = Client;
     var registration = new AssetRegistrationRequest { Name = assetName };
     var response = await client.PostAsJsonAsync("/assets", registration);
     var asset = await response.Content.ReadFromJsonAsync<AssetRegistrationResponse>();
@@ -83,7 +75,7 @@ public class AssetRegistration : IClassFixture<WebApplicationFactory<Program>>
   public async Task GivenAnNonExistingAsset_WhenIRequestTheAsset_TheRequestIsRejected()
   {
     // Given a fresh client
-    var client = _factory.CreateClient();
+    var client = Client;
     // And a non existing asset ID
     var assetId = "non-existing-asset-id";
 

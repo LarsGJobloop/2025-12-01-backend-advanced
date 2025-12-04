@@ -5,15 +5,8 @@ using Xunit;
 
 namespace AssetManagementService.Tests;
 
-public class HealthCheck : IClassFixture<WebApplicationFactory<Program>>
+public class HealthCheck(WebApplicationFactory<Program> factory) : TestEnvironment(factory)
 {
-  private readonly WebApplicationFactory<Program> _factory;
-
-  public HealthCheck(WebApplicationFactory<Program> factory)
-  {
-    _factory = factory;
-  }
-
   /// <summary>
   /// A simple test to verify that we can actually connect to the server
   /// send messages, recive and parse responses.
@@ -22,7 +15,7 @@ public class HealthCheck : IClassFixture<WebApplicationFactory<Program>>
   public async Task WhenQuerrying_HealthEndpoint_ServerRespondsWithOK()
   {
     // Given a fresh client
-    var client = _factory.CreateClient();
+    var client = Client;
 
     // When querry the Health Endpoint
     var response = await client.GetAsync("/health");
