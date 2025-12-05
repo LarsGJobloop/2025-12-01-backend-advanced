@@ -1,6 +1,7 @@
 # Solution Specification
 
 > [!NOTE]
+>
 > This is the preliminary draft sketched out before starting to write scenarios. It represents the initial planning phase.
 
 This specification defines two API modules that will be developed using Test Driven Development (TDD).

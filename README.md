@@ -36,6 +36,7 @@ dotnet run
 ```
 
 > [!NOTE]
+>
 > Both services can run simultaneously. ReservationService communicates with AssetManagementService via HTTP.
 
 ### Adding a New Service
@@ -44,7 +45,9 @@ See [docs/setup-new-service.md](docs/setup-new-service.md) for instructions on s
 
 ### Walking Through the Commit History
 
-> [!IMPORTANT] > **The commit history is intended to be replayed step-by-step.** It follows TDD conventions (red → green → refactor) and serves as a **replayable walkthrough** of the development process.
+> [!IMPORTANT]
+>
+> **The commit history is intended to be replayed step-by-step.** It follows TDD conventions (red → green → refactor) and serves as a **replayable walkthrough** of the development process.
 
 ```sh
 # View commit history
