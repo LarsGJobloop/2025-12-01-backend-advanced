@@ -84,6 +84,13 @@ git checkout main
     ![Solution draft](/docs/sketches/solution-draft.excalidraw.png)
   - [Week 1 Checklist](week-1-checklist.md) - Suggested scenarios to consider for your services
 
+- Week 2 - SOA
+
+  - Overview
+    ![Overview](/docs/sketches/week2.excalidraw.png)
+  - Service examples
+    ![Services in real life](/docs/sketches/soa-in-real-life.excalidraw.png)
+
 ### [Technology Reference](/docs/technology-references.md)
 
 ## Sketches
