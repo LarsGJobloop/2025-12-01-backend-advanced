@@ -29,15 +29,15 @@ services:
       - backend
 
   postgres:
-    image: postgres:18
+    image: postgres
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: backend
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    networks:
+      - backend
 
   postgres-web-ui:
     image: dpage/pgadmin4
@@ -48,9 +48,12 @@ services:
       PGADMIN_DEFAULT_PASSWORD: password
     depends_on:
       - postgres
+    networks:
+      - backend
 
 networks:
   backend:
 
 volumes:
   postgres-data:
+  pgadmin-data:
