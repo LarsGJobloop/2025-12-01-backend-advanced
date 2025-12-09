@@ -192,3 +192,5 @@ networks:
 volumes:
   # Stores PostgreSQL database files
   postgres-data:
+  # Stores PGAdmin data files
+  pgadmin-data:
