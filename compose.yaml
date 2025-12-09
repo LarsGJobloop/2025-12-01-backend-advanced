@@ -1,59 +1,194 @@
+# =============================================================================
+# Docker Compose Manifest
+# =============================================================================
+#
+# This file defines a multi-container application using Docker Compose.
+# 
+# WHAT IS DOCKER COMPOSE?
+# Docker Compose is a tool for defining and running multi-container applications.
+# Instead of running multiple `docker run` commands, you describe all your
+# services in this single YAML file and start everything with `docker compose up`.
+#
+# KEY CONCEPTS:
+#   - Services:  The containers that make up your application
+#   - Networks:  How containers communicate with each other
+#   - Volumes:   Persistent storage that survives container restarts
+#
+# COMMON COMMANDS:
+#   docker compose up        Start all services (add -d for detached/background)
+#   docker compose down      Stop and remove all services
+#   docker compose logs      View logs from all services
+#   docker compose ps        List running services
+#   docker compose build     Rebuild images from Dockerfiles
+#
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# SERVICES
+# -----------------------------------------------------------------------------
+# Each entry under "services" defines a container that Docker will create.
+# The name you give (e.g., "asset", "postgres") becomes the hostname that
+# other containers can use to communicate with it.
+# -----------------------------------------------------------------------------
+
 services:
+
+  # ---------------------------------------------------------------------------
+  # ASSET MANAGEMENT SERVICE
+  # ---------------------------------------------------------------------------
+  # A custom application built from our Dockerfile.
+  # Accessible from your browser at: http://localhost:8000
+  # ---------------------------------------------------------------------------
   asset:
-    # Configuration for building the image
+    # BUILD: Tells Docker to build an image from a Dockerfile instead of
+    # pulling a pre-built image from Docker Hub.
     build:
+      # "context" is the directory Docker uses as the build context.
+      # The "." means the current directory (where this compose.yaml lives).
       context: .
+
+      # "dockerfile" specifies which Dockerfile to use for building.
       dockerfile: Dockerfile
+
+      # "args" passes build-time variables to the Dockerfile.
+      # These are available in the Dockerfile via ARG instructions.
       args:
         SERVICE_NAME: AssetManagementService
-    # Map the port 8080 of the container to the port 8000 of the host
+
+    # PORTS: Maps container ports to your host machine.
+    # Format: "HOST_PORT:CONTAINER_PORT"
+    # 
+    # In this case:
+    #   - The app inside the container listens on port 8080
+    #   - We expose it as port 8000 on your computer
+    #   - So you access it at http://localhost:8000
     ports:
       - "8000:8080"
+
+    # NETWORKS: Specifies which networks this container joins.
+    # Containers on the same network can communicate using service names.
     networks:
       - backend
 
+  # ---------------------------------------------------------------------------
+  # RESERVATION SERVICE
+  # ---------------------------------------------------------------------------
+  # Another custom application that communicates with the asset service.
+  # Accessible from your browser at: http://localhost:8001
+  # ---------------------------------------------------------------------------
   reservation:
-    # Configuration for building the image
     build:
       context: .
       dockerfile: Dockerfile
       args:
         SERVICE_NAME: ReservationService
+
     ports:
       - "8001:8080"
+
+    # ENVIRONMENT: Sets environment variables inside the container.
+    # These are available to your application at runtime.
+    # 
+    # IMPORTANT: Notice we use "http://asset:8080" not "http://localhost:8000"!
+    # Inside the Docker network, containers talk to each other using their
+    # service names as hostnames. The "asset" service is reachable at "asset:8080"
+    # from any container on the same network.
     environment:
-      # URLs are relative to the container, so we need to use the service name
-      # and the port of the asset service
       ASSET_MANAGEMENT_SERVICE_URL: http://asset:8080
+
     networks:
       - backend
 
+  # ---------------------------------------------------------------------------
+  # POSTGRESQL DATABASE
+  # ---------------------------------------------------------------------------
+  # A pre-built database image from Docker Hub.
+  # Connect from your host machine at: localhost:5432
+  # Connect from other containers at: postgres:5432
+  # ---------------------------------------------------------------------------
   postgres:
+    # IMAGE: Pulls a pre-built image from Docker Hub (or another registry).
+    # "postgres" is the official PostgreSQL image.
+    # You can specify versions like "postgres:16" or "postgres:16-alpine".
     image: postgres
+
     ports:
       - "5432:5432"
+
+    # Environment variables configure the PostgreSQL container.
+    # POSTGRES_PASSWORD is required by the official postgres image.
     environment:
       POSTGRES_PASSWORD: postgres
+
+    # VOLUMES: Mounts persistent storage into the container.
+    # Format: "VOLUME_NAME:PATH_INSIDE_CONTAINER"
+    #
+    # Without volumes, all data is lost when the container stops!
+    # This mounts the "postgres-data" volume to PostgreSQL's data directory,
+    # so your database survives restarts.
     volumes:
       - postgres-data:/var/lib/postgresql/data
+
     networks:
       - backend
 
+  # ---------------------------------------------------------------------------
+  # PGADMIN - Database Web Interface
+  # ---------------------------------------------------------------------------
+  # A web-based GUI for managing PostgreSQL databases.
+  # Access at: http://localhost:8081
+  # Login with: admin@example.com / password
+  # ---------------------------------------------------------------------------
   postgres-web-ui:
     image: dpage/pgadmin4
+
     ports:
       - "8081:80"
+
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
       PGADMIN_DEFAULT_PASSWORD: password
+
+    # DEPENDS_ON: Controls startup order.
+    # This tells Docker Compose to start the "postgres" service before
+    # starting this one. Note: This only waits for the container to START,
+    # not for the service inside to be READY.
     depends_on:
       - postgres
+
     networks:
       - backend
 
+
+# -----------------------------------------------------------------------------
+# NETWORKS
+# -----------------------------------------------------------------------------
+# Networks allow containers to communicate with each other.
+# By default, Docker Compose creates a network for your app, but defining
+# one explicitly gives you more control and clarity.
+#
+# All services on the "backend" network can reach each other using their
+# service names as hostnames (e.g., "postgres", "asset", "reservation").
+# -----------------------------------------------------------------------------
+
 networks:
   backend:
+    # Using default settings. Docker will create a bridge network.
+    # Bridge networks allow containers to communicate while isolating
+    # them from other Docker networks on your system.
+
+
+# -----------------------------------------------------------------------------
+# VOLUMES
+# -----------------------------------------------------------------------------
+# Volumes provide persistent storage for your containers.
+# Data in volumes persists even when containers are stopped or removed.
+#
+# To see your volumes:      docker volume ls
+# To inspect a volume:      docker volume inspect <name>
+# To remove unused volumes: docker volume prune
+# -----------------------------------------------------------------------------
 
 volumes:
+  # Stores PostgreSQL database files
   postgres-data:
-  pgadmin-data:
