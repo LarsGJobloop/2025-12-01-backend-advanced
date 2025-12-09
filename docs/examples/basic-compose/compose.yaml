@@ -1,0 +1,12 @@
+# Application that we run
+services:
+  nginx:
+    image: docker.io/nginx:latest
+    ports:
+      - "9090:80"
+
+# Networks that we can use to connect services
+# network:
+
+# Volumes that we can use to persist data
+# volumes:
