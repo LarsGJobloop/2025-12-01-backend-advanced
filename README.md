@@ -33,6 +33,23 @@ docker compose up --build
 docker compose down --volumes --remove-orphans
 ```
 
+**Log into the PostgreSQL Admin Web UI**:
+
+1. Go to http://localhost:5050
+2. Log in with the credentials from [compose.yaml#pgadmin](/compose.yaml)
+
+   - `username = admin@example.com`
+   - `password = password`
+
+3. Connect to the database using [compose.yaml#postgres](/compose.yaml)
+
+   - `database = backend`
+   - `host = postgres` <- This is whatever name you called the service
+   - `user = postgres` <- Default PostgreSQL username
+   - `password = admin` <- Configurable through Environment Variables
+
+4. Peruse your database
+
 ### Adding a New Service
 
 See [docs/setup-new-service.md](docs/setup-new-service.md) for instructions on setting up a new service with its test suite.
