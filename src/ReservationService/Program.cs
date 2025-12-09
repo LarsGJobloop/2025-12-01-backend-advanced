@@ -4,8 +4,10 @@ using ReservationService.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Register AssetManagementServiceClient
-// Hardcoding for now as we have no test that says otherwise.
-var assetManagementServiceUrl = "http://localhost:5002";
+var assetManagementServiceUrl =
+  Environment.GetEnvironmentVariable("ASSET_MANAGEMENT_SERVICE_URL") ??
+  "http://localhost:5002";
+
 builder.Services.AddHttpClient<AssetManagementServiceClient>(client =>
 {
   client.BaseAddress = new Uri(assetManagementServiceUrl);
