@@ -14,6 +14,10 @@ Links to the various technologies we will use, grouped by when they are introduc
 
 ## Week 2 - Service-Oriented Architecture (SOA)
 
+- [Docker](https://www.docker.com/): Platform for developing, shipping, and running applications in containers
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/): GUI application for running Docker on Mac and Windows
+- [OrbStack](https://orbstack.dev/): Fast, lightweight alternative to Docker Desktop for Mac
+- [Open Container Initiative (OCI)](https://opencontainers.org/): Industry standards for container formats and runtime specifications
 - [Docker Compose](https://docs.docker.com/compose/): Tool for defining and running multi-container Docker applications using a YAML file
 - [Docker Compose File Reference](https://docs.docker.com/compose/compose-file/): Complete reference for compose.yaml syntax and options
 - [PostgreSQL](https://www.postgresql.org/): Open-source relational database management system
