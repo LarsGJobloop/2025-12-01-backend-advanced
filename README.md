@@ -21,23 +21,17 @@ dotnet test
 
 ### Running Services
 
-**AssetManagementService** (runs on http://localhost:5002):
+**Start compose file** (and rebuild the images):
 
 ```sh
-cd src/AssetManagementService
-dotnet run
+docker compose up --build
 ```
 
-**ReservationService** (runs on http://localhost:5108):
+**Clean everything up**:
 
 ```sh
-cd src/ReservationService
-dotnet run
+docker compose down --volumes --remove-orphans
 ```
-
-> [!NOTE]
->
-> Both services can run simultaneously. ReservationService communicates with AssetManagementService via HTTP.
 
 ### Adding a New Service
 

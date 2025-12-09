@@ -1,0 +1,21 @@
+services:
+  asset:
+    # Configuration for building the image
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: AssetManagementService
+    # Map the port 8080 of the container to the port 8000 of the host
+    ports:
+      - "8000:8080"
+
+  reservation:
+    # Configuration for building the image
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: ReservationService
+    ports:
+      - "8001:8080"
