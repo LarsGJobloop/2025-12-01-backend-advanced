@@ -20,6 +20,13 @@ builder.Services.AddDbContext<AssetManagementDbContext>(context =>
 
 var app = builder.Build();
 
+// Apply pending migrations on startup
+using (var scope = app.Services.CreateScope())
+{
+  var db = scope.ServiceProvider.GetRequiredService<AssetManagementDbContext>();
+  db.Database.Migrate();
+}
+
 app.MapGet("/health", () => "Ok");
 
 app.MapPost("/assets", (
