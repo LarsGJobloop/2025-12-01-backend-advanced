@@ -77,7 +77,7 @@ public class TestEnvironment : IClassFixture<WebApplicationFactory<Program>>
   /// The factory is shared across all test methods in the class, so all tests use the same
   /// test server instance.
   /// </summary>
-  protected readonly WebApplicationFactory<Program> _factory;
+  protected WebApplicationFactory<Program> _factory;
 
   /// <summary>
   /// Constructor that receives the WebApplicationFactory instance from xUnit.
@@ -104,4 +104,14 @@ public class TestEnvironment : IClassFixture<WebApplicationFactory<Program>>
   /// The HTTP client that can send requests to the test server.
   /// </summary>
   public HttpClient Client => _factory.CreateClient();
+
+  /// <summary>
+  /// Restart the test server.
+  /// </summary>
+  /// <returns></returns>
+  public async Task RestartAsync()
+  {
+    await _factory.DisposeAsync();
+    _factory = new WebApplicationFactory<Program>();
+  }
 }
