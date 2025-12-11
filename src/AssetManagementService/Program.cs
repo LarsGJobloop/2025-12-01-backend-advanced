@@ -1,3 +1,4 @@
+using AssetManagementService.Context;
 using AssetManagementService.Services;
 using Contracts.AssetManagement;
 
@@ -5,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Register services
 builder.Services.AddSingleton<AssetService>();
+
+builder.Services.AddDbContext<AssetManagementDbContext>();
 
 var app = builder.Build();
 
