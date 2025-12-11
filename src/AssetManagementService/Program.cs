@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Register services
-builder.Services.AddSingleton<AssetService>();
+builder.Services.AddScoped<AssetService>();
 
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
 var dbPort = Environment.GetEnvironmentVariable("DB_PORT") ?? "5432";

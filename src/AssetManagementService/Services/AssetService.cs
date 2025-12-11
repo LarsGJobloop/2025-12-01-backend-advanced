@@ -1,3 +1,4 @@
+using AssetManagementService.Context;
 using Contracts.AssetManagement;
 
 namespace AssetManagementService.Services;
@@ -7,7 +8,12 @@ namespace AssetManagementService.Services;
 /// </summary>
 public class AssetService
 {
-  private readonly Dictionary<string, Asset> _assets = new();
+  private readonly AssetManagementDbContext _context;
+
+  public AssetService(AssetManagementDbContext context)
+  {
+    _context = context;
+  }
 
   /// <summary>
   /// Registers a new asset.
@@ -17,7 +23,8 @@ public class AssetService
   public AssetRegistrationResponse RegisterAsset(AssetRegistrationRequest request)
   {
     var asset = new Asset { Id = Guid.NewGuid().ToString(), Name = request.Name };
-    _assets.Add(asset.Id, asset);
+    _context.Assets.Add(asset);
+    _context.SaveChanges();
     return new AssetRegistrationResponse { Id = asset.Id };
   }
 
@@ -28,8 +35,7 @@ public class AssetService
   /// <returns>The asset if found, null otherwise.</returns>
   public Asset? GetAsset(string id)
   {
-    _assets.TryGetValue(id, out var asset);
-    return asset;
+    return _context.Assets.FirstOrDefault(a => a.Id == id);
   }
 
   /// <summary>
@@ -38,7 +44,7 @@ public class AssetService
   /// <returns>A list of all assets.</returns>
   public List<Asset> ListAssets()
   {
-    return _assets.Values.ToList();
+    return _context.Assets.ToList();
   }
 }
 
