@@ -2,6 +2,8 @@
 
 A service-oriented architecture project demonstrating TDD practices with two independent services: AssetManagementService and ReservationService.
 
+![Overview](/docs/sketches/solution-overveiw.excalidraw.png)
+
 ## Getting Started
 
 ### Prerequisites
