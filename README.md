@@ -56,6 +56,26 @@ docker compose down --volumes --remove-orphans
 
 See [docs/setup-new-service.md](docs/setup-new-service.md) for instructions on setting up a new service with its test suite.
 
+### Changing the schema
+
+> [!IMPORTANT]
+>
+> Changing the schema can lead to DATA LOSS! Be very mindful if you **remove** or make changes to existing fields.
+>
+> Additions are far less dangeruous as no data is lost.
+
+1. Update your model and create a new, _named_, migration.
+
+   ```sh
+   dotnet ef --project src/${Service_Name} migrations add ${migration_name}
+   ```
+
+2. Restart the server.
+
+> [!TIP]
+>
+> Ensuring that we have a test that fails whenever schema changes happens and allows us to review the changes would be helpful. You can research database snapshot testing to see how to set that up.
+
 ### Walking Through the Commit History
 
 > [!IMPORTANT]
