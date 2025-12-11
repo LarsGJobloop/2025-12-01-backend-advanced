@@ -1,13 +1,22 @@
 using AssetManagementService.Context;
 using AssetManagementService.Services;
 using Contracts.AssetManagement;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Register services
 builder.Services.AddSingleton<AssetService>();
 
-builder.Services.AddDbContext<AssetManagementDbContext>();
+var dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
+var dbPort = Environment.GetEnvironmentVariable("DB_PORT") ?? "5432";
+var dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? "postgres";
+var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "postgres";
+var dbName = Environment.GetEnvironmentVariable("DB_NAME") ?? "asset_management";
+var connectionString = $"Host={dbHost};Port={dbPort};Username={dbUser};Password={dbPassword};Database={dbName}";
+
+builder.Services.AddDbContext<AssetManagementDbContext>(context =>
+  context.UseNpgsql(connectionString));
 
 var app = builder.Build();
 
